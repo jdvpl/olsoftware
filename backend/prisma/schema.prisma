@@ -25,7 +25,7 @@ model establishment {
 model merchant {
   id_merchant       Int             @id @default(autoincrement())
   business_name     String
-  municipality      String          @db.VarChar(100)
+  id_municipio      Int
   phone             String?         @db.VarChar(20)
   optional_email    String?         @db.VarChar(255)
   registration_date DateTime        @db.Date
@@ -33,9 +33,11 @@ model merchant {
   updated_at        DateTime?       @db.Timestamp(6)
   updated_by        String?         @db.VarChar(100)
   establishment     establishment[]
+  municipality      municipality    @relation(fields: [id_municipio], references: [id_municipio], onDelete: NoAction, onUpdate: NoAction, map: "fk_merchant_municipio")
 
   @@index([business_name], map: "idx_merchant_name")
   @@index([status], map: "idx_merchant_status")
+  @@index([id_municipio], map: "idx_merchant_municipio")
 }
 
 model role {
@@ -53,4 +55,30 @@ model user {
   role     role   @relation(fields: [role_id], references: [id_role], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_role")
 
   @@index([email], map: "idx_user_email")
+}
+
+model country {
+  id_country Int          @id @default(autoincrement())
+  nombre     String       @unique @db.VarChar(100)
+  department department[]
+}
+
+model department {
+  id_department Int            @id @default(autoincrement())
+  nombre        String         @db.VarChar(100)
+  id_country    Int
+  country       country        @relation(fields: [id_country], references: [id_country], onDelete: NoAction, onUpdate: NoAction, map: "fk_department_country")
+  municipality  municipality[]
+
+  @@index([id_country], map: "idx_department_country")
+}
+
+model municipality {
+  id_municipio  Int        @id @default(autoincrement())
+  nombre        String     @db.VarChar(100)
+  id_department Int
+  merchant      merchant[]
+  department    department @relation(fields: [id_department], references: [id_department], onDelete: NoAction, onUpdate: NoAction, map: "fk_municipality_department")
+
+  @@index([id_department], map: "idx_municipality_department")
 }
