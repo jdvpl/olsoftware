@@ -1,0 +1,13 @@
+services:
+  olsoftware_db:
+    container_name: olsoftware_db
+    image: postgres:17.5
+    restart: always
+    volumes:
+    - ./db:/var/lib/postgresql/data
+    ports:
+    - 5439:5432
+    environment:
+      POSTGRES_USER: olsoftware
+      POSTGRES_PASSWORD: olsoftware2025
+      POSTGRES_DB: olsoftware_db
