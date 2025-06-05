@@ -13,8 +13,11 @@ export class LoginUseCase {
 
   async execute(email: string, password: string) {
     const user = await this.repo.findUserByEmail(email);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    const comparedPassword=await bcrypt.compare(password, user.password)
+    console.log({hashedPassword,comparedPassword});
+    if (!user || !comparedPassword) {
       throw new UnauthorizedException('Invalid credentials');
     }
 

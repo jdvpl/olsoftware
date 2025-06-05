@@ -6,6 +6,7 @@ import {
   IsEmail,
   IsDateString,
   IsIn,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateMerchantDto {
@@ -21,7 +22,6 @@ export class CreateMerchantDto {
   phone?: string;
 
   @IsOptional()
-  @IsEmail()
   optional_email?: string;
 
   @IsDateString()
@@ -29,4 +29,9 @@ export class CreateMerchantDto {
 
   @IsIn(['ACTIVE', 'INACTIVE'])
   status: 'ACTIVE' | 'INACTIVE';
+
+
+  @IsOptional()
+  @IsBoolean()
+  has_establishments?: boolean;
 }

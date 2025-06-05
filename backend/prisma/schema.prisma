@@ -22,18 +22,19 @@ model establishment {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model merchant {
-  id_merchant       Int             @id @default(autoincrement())
-  business_name     String
-  id_municipio      Int
-  phone             String?         @db.VarChar(20)
-  optional_email    String?         @db.VarChar(255)
-  registration_date DateTime        @db.Date
-  status            String          @db.VarChar(10)
-  updated_at        DateTime?       @db.Timestamp(6)
-  updated_by        String?         @db.VarChar(100)
-  establishment     establishment[]
-  municipality      municipality    @relation(fields: [id_municipio], references: [id_municipio], onDelete: NoAction, onUpdate: NoAction, map: "fk_merchant_municipio")
-  
+  id_merchant        Int             @id @default(autoincrement())
+  business_name      String
+  id_municipio       Int
+  phone              String?         @db.VarChar(20)
+  optional_email     String?         @db.VarChar(255)
+  registration_date  DateTime        @db.Date
+  status             String          @db.VarChar(10)
+  updated_at         DateTime?       @db.Timestamp(6)
+  updated_by         String?         @db.VarChar(100)
+  has_establishments Boolean?  @default(false)
+  establishment      establishment[]
+  municipality       municipality    @relation(fields: [id_municipio], references: [id_municipio], onDelete: NoAction, onUpdate: NoAction, map: "fk_merchant_municipio")
+
   @@index([business_name], map: "idx_merchant_name")
   @@index([status], map: "idx_merchant_status")
   @@index([id_municipio], map: "idx_merchant_municipio")

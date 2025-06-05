@@ -75,3 +75,7 @@ CREATE INDEX idx_establishment_merchant ON establishment(id_merchant);
 CREATE INDEX idx_merchant_municipio ON merchant(id_municipio);
 CREATE INDEX idx_municipality_department ON municipality(id_department);
 CREATE INDEX idx_department_country ON department(id_country);
+
+
+ALTER TABLE merchant
+ADD COLUMN has_establishments BOOLEAN DEFAULT FALSE;

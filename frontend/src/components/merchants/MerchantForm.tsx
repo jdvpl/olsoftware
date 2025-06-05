@@ -18,7 +18,7 @@ type FormInputs = {
   optional_email?: string;
   registration_date: string;
   status: 'ACTIVE' | 'INACTIVE';
-  has_establishments: boolean; // ¿Posee establecimientos?
+  has_establishments: boolean; 
 };
 
 const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
@@ -44,7 +44,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
       phone: merchant?.phone || '',
       optional_email: merchant?.optional_email || '',
       registration_date: merchant?.registration_date
-        ? new Date(merchant.registration_date).toISOString().split('T')[0]
+        ? new Date(merchant.registration_date).toISOString()
         : '',
       status: merchant?.status || 'ACTIVE',
       has_establishments: false, 
@@ -81,7 +81,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
         phone: merchant.phone || '',
         optional_email: merchant.optional_email || '',
         registration_date: merchant.registration_date
-          ? new Date(merchant.registration_date).toISOString().split('T')[0]
+          ? new Date(merchant.registration_date).toISOString()
           : '',
         status: merchant.status,
         has_establishments: false, 
@@ -96,7 +96,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
     const payload: CreateMerchantDto | UpdateMerchantDto = {
       ...data,
       id_municipio: Number(data.id_municipio), 
-      registration_date: new Date(data.registration_date).toISOString().split('T')[0], 
+      registration_date: new Date(data.registration_date).toISOString()
     };
 
 
