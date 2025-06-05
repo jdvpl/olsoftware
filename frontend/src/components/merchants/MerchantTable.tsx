@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Merchant } from '@/types/merchant';
 import api from '@/services/api';
-import {  PencilIcon, TrashIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'; // Necesitarás instalar @heroicons/react
+import {  PencilIcon, TrashIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
 
 interface MerchantTableProps {
