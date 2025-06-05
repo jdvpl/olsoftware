@@ -5,7 +5,7 @@ import { AuthController } from './auth.controller';
 import { LoginUseCase } from './application/use-cases/login.use-case';
 import { AuthPrismaRepository } from './infrastructure/prisma/auth.prisma.repository';
 import { JwtStrategy } from './jwt.strategy';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../shared/prisma/prisma.service';
 import { envs } from 'src/shared/env/envs';
 
 @Module({
