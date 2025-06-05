@@ -1,10 +1,10 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { DatabaseRolesGuard } from '../shared/guards/database-roles.guard';
 import { MunicipalitiesService } from './municipalities.service';
 import { Roles } from '../shared/decorators/roles.decorator';
 
 @Controller('valores')
-@UseGuards(JwtAuthGuard)
+@UseGuards(DatabaseRolesGuard)
 export class MunicipalitiesController {
   constructor(private service: MunicipalitiesService) {}
 

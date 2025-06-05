@@ -27,9 +27,13 @@ export class DatabaseRolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-    console.log({ request, ROLES_KEY });
+
     if (!user || !user.id) {
-      throw new ForbiddenException('Invalid user session');
+      throw new ForbiddenException('User not authenticated');
+    }
+
+    if (user.role && requiredRoles.includes(user.role)) {
+      return true;
     }
 
     const dbUser = await this.prisma.user.findUnique({
@@ -43,7 +47,7 @@ export class DatabaseRolesGuard implements CanActivate {
 
     if (!requiredRoles.includes(dbUser.role.name)) {
       throw new ForbiddenException(
-        `Access denied for role: ${dbUser.role.name}`,
+        `Access denied. Required roles: ${requiredRoles.join(', ')}. User role: ${dbUser.role.name}`,
       );
     }
 
