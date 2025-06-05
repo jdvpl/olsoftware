@@ -33,7 +33,7 @@ INSERT INTO municipality (id_municipio, nombre, id_department) VALUES
 -- admin@example.com       → admin123
 -- bob@example.com         → registrador123
 INSERT INTO "user" (name, email, password, role_id) VALUES
-  ('Alice Admin', 'admin@example.com', '$2b$10$uCHtlf9J0JpXxKM1yCNZyew7vG/EZBSWyJe6mqef29rkXCe1NP2y6', 1),
+  ('Alice Admin', 'admin@example.com', '$2b$10$4D9Bb6asWpoq40qPhJQTDen0NS58tNUzWNhU08rLH7QSh2/D9bAnq', 1),
   ('Bob Registrar', 'bob@example.com', '$2b$10$QOb8PyqT1Xvvn7V8H6lgxO9R16hTpyNjya4owbKNugMoqNE.3QHkG', 2);
 
 -- Insertar comerciantes
