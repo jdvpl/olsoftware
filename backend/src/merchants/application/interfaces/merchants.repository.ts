@@ -10,13 +10,21 @@ export interface Pagination<T> {
   currentPage: number;
 }
 
+export type MerchantWithRelations = merchant & {
+  municipality?: { nombre: string } | null;
+  establishment: Array<{
+    income: number | any;
+    employees_count: number | any;
+  }>;
+};
+
 export interface IMerchantsRepository {
-  create(data: CreateMerchantDto, updatedBy: string): Promise<merchant>;
+  create(dto: CreateMerchantDto, updatedBy: string): Promise<merchant>;
   list(filters: FiltersMerchantDto): Promise<Pagination<merchant>>;
   findById(id: number): Promise<merchant | null>;
   update(
     id: number,
-    data: UpdateMerchantDto,
+    dto: UpdateMerchantDto,
     updatedBy: string,
   ): Promise<merchant>;
   remove(id: number): Promise<void>;
@@ -25,4 +33,5 @@ export interface IMerchantsRepository {
     status: 'ACTIVE' | 'INACTIVE',
     updatedBy: string,
   ): Promise<merchant>;
+  getMerchantsForReport(): Promise<MerchantWithRelations[]>;
 }

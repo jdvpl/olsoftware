@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../shared/prisma/prisma.service';
 import {
   IMerchantsRepository,
+  MerchantWithRelations,
   Pagination,
 } from '../../application/interfaces/merchants.repository';
 import { merchant } from '@prisma/client';
@@ -13,9 +14,15 @@ import { FiltersMerchantDto } from '../../application/dto/filters-merchant.dto';
 export class MerchantsPrismaRepository implements IMerchantsRepository {
   constructor(private prisma: PrismaService) {}
 
+  private async setSessionUser(updatedBy: string) {
+    await this.prisma
+      .$executeRaw`SELECT set_config('olsoftware.current_user', ${updatedBy}, false)`;
+  }
+
   async create(dto: CreateMerchantDto, updatedBy: string): Promise<merchant> {
+    await this.setSessionUser(updatedBy);
     return this.prisma.merchant.create({
-      data: { ...dto, updated_by: updatedBy },
+      data: dto,
     });
   }
 
@@ -63,9 +70,10 @@ export class MerchantsPrismaRepository implements IMerchantsRepository {
     updatedBy: string,
   ): Promise<merchant> {
     await this.ensureExists(id);
+    await this.setSessionUser(updatedBy);
     return this.prisma.merchant.update({
       where: { id_merchant: id },
-      data: { ...dto, updated_by: updatedBy },
+      data: dto,
     });
   }
 
@@ -80,10 +88,27 @@ export class MerchantsPrismaRepository implements IMerchantsRepository {
     updatedBy: string,
   ): Promise<merchant> {
     await this.ensureExists(id);
+    await this.setSessionUser(updatedBy);
     return this.prisma.merchant.update({
       where: { id_merchant: id },
-      data: { status, updated_by: updatedBy },
+      data: { status },
     });
+  }
+
+  async getMerchantsForReport(): Promise<MerchantWithRelations[]> {
+    return this.prisma.merchant.findMany({
+      where: { status: 'ACTIVE' },
+      include: {
+        municipality: true,
+        establishment: {
+          select: {
+            income: true,
+            employee_count: true,
+          },
+        },
+      },
+      orderBy: { business_name: 'asc' },
+    }) as unknown as Promise<MerchantWithRelations[]>;
   }
 
   private async ensureExists(id: number) {

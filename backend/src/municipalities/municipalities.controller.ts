@@ -10,7 +10,21 @@ export class MunicipalitiesController {
 
   @Roles('ADMIN', 'AUX_REG')
   @Get('municipios')
-  findAll() {
-    return this.service.getAll();
+  async findAll() {
+    try {
+      const municipalities = await this.service.getAll();
+      return {
+        success: true,
+        data: municipalities,
+        message: 'Municipios obtenidos exitosamente',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: [],
+        message: 'Error al obtener los municipios',
+        error: error.message,
+      };
+    }
   }
 }

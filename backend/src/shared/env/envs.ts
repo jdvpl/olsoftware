@@ -6,6 +6,7 @@ interface IEnvs {
   PORT: string;
   SECRET_JWT: string;
   DATABASE_URL: string;
+  WHITE_LIST: string;
 }
 
 const envsSchema = joi
@@ -13,6 +14,7 @@ const envsSchema = joi
     PORT: joi.string().required(),
     SECRET_JWT: joi.string().required(),
     DATABASE_URL: joi.string().required(),
+    WHITE_LIST: joi.string().required(),
   })
   .unknown(true);
 
@@ -28,4 +30,5 @@ export const envs = {
   PORT: envVars.PORT,
   DATABASE_URL: envVars.DATABASE_URL,
   SECRET_JWT: envVars.SECRET_JWT,
+  WHITE_LIST: envVars.WHITE_LIST,
 };
