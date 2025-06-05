@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ userName, userRole }) => {
           OLSoftware - Comerciantes
         </Link>
         <nav className="flex items-center space-x-4">
-             <Link href="/merchants/new" className="hover:text-gray-300">Crear Comerciante</Link>
+          <Link href="/merchants/new" className="hover:text-gray-300">Crear Comerciante</Link>
         </nav>
         <div className="flex items-center">
           <span className="mr-4">

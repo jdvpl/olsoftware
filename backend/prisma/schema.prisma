@@ -33,7 +33,7 @@ model merchant {
   updated_by        String?         @db.VarChar(100)
   establishment     establishment[]
   municipality      municipality    @relation(fields: [id_municipio], references: [id_municipio], onDelete: NoAction, onUpdate: NoAction, map: "fk_merchant_municipio")
-
+  
   @@index([business_name], map: "idx_merchant_name")
   @@index([status], map: "idx_merchant_status")
   @@index([id_municipio], map: "idx_merchant_municipio")
