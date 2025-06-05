@@ -7,6 +7,7 @@ import { AuthPrismaRepository } from './infrastructure/prisma/auth.prisma.reposi
 import { JwtStrategy } from './jwt.strategy';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import { envs } from 'src/shared/env/envs';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Module({
   imports: [
@@ -21,10 +22,12 @@ import { envs } from 'src/shared/env/envs';
     PrismaService,
     JwtStrategy,
     LoginUseCase,
+    JwtAuthGuard,
     {
       provide: 'IAuthRepository',
       useClass: AuthPrismaRepository,
     },
   ],
+  exports: [JwtAuthGuard],
 })
 export class AuthModule {}

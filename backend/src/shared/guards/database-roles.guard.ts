@@ -27,7 +27,7 @@ export class DatabaseRolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-
+    console.log({ request, ROLES_KEY });
     if (!user || !user.id) {
       throw new ForbiddenException('Invalid user session');
     }
