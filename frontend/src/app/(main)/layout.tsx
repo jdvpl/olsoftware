@@ -19,9 +19,9 @@ export default function MainLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-blue-50">
       <Header userName={user?.name || ''} userRole={user?.role || ''} />
-      <main className="flex-grow container mx-auto p-4">
+      <main className="flex-grow container mx-auto p-4 ">
         {children}
       </main>
     </div>
