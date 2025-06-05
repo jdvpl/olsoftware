@@ -7,7 +7,7 @@ import { AuthPrismaRepository } from './infrastructure/prisma/auth.prisma.reposi
 import { JwtStrategy } from './jwt.strategy';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import { envs } from 'src/shared/env/envs';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
   imports: [
