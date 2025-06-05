@@ -37,7 +37,7 @@ export class MerchantsController {
     };
   }
 
-  @Roles('ADMIN') // Changed from @Roles('ADMIN', 'AUX_REG')
+  @Roles('ADMIN') 
   @Get('reporte/csv')
   async downloadReport(@Res() res: Response) {
     try {

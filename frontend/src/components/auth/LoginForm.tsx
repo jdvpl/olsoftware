@@ -34,7 +34,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/background.jpeg')] bg-cover bg-center">
       <div className="p-8 bg-white shadow-md rounded-lg w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-2">OLSoftware</h1>
         <p className="text-center text-gray-600 mb-6">
@@ -93,7 +93,7 @@ const LoginForm = () => {
             disabled={!termsAccepted}
             className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
               termsAccepted
-                ? 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                ? 'bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
           >
@@ -101,9 +101,7 @@ const LoginForm = () => {
           </button>
         </form>
       </div>
-      <div className="mt-4 text-center text-sm text-gray-500">
-        Beneficios por renovar (Este es un texto de ejemplo)
-      </div>
+   
     </div>
   );
 };
