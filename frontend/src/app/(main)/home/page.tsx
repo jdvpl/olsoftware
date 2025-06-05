@@ -30,7 +30,7 @@ const HomePage = () => {
       if (filters.registration_date) params.append('registration_date', filters.registration_date);
       if (filters.status) params.append('status', filters.status);
       
-      const response = await api.get<any>(`/comerciantes?${params.toString()}`);
+      const response = await api.get(`/comerciantes?${params.toString()}`);
       if (response.data.success) {
       
         const merchantsWithCount = response.data.data.items.map((m: Merchant) => ({

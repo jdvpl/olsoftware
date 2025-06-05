@@ -27,7 +27,7 @@ const LoginForm = () => {
       } else {
         setError(response.data.message || 'Error en el inicio de sesión.');
       }
-    } catch (err: any) {
+    } catch (err) {
       setError(err.response?.data?.message || 'Error de conexión o credenciales inválidas.');
       console.error(err);
     }

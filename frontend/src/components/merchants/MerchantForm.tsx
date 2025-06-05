@@ -118,7 +118,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
             setFormError(response.data.message || 'Error al crear.');
         }
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error submitting form:', err);
       setFormError(err.response?.data?.message || 'Ocurrió un error en el servidor.');
     } finally {

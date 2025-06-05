@@ -1,10 +1,9 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Merchant } from '@/types/merchant';
 import api from '@/services/api';
-import { EyeIcon, PencilIcon, TrashIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'; // Necesitarás instalar @heroicons/react
+import {  PencilIcon, TrashIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'; // Necesitarás instalar @heroicons/react
 
 
 interface MerchantTableProps {
@@ -14,7 +13,6 @@ interface MerchantTableProps {
 }
 
 const MerchantTable: React.FC<MerchantTableProps> = ({ merchants, onRefresh, currentUserRole }) => {
-  const router = useRouter();
 
   const handleDelete = async (id: number) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este comerciante?')) {
