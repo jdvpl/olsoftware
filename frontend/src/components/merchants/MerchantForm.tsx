@@ -55,7 +55,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
         ? new Date(merchant.registration_date).toISOString().substring(0, 10)
         : '',
       status: merchant?.status || 'ACTIVE',
-      has_establishments: false,
+      has_establishments: !!merchant?.total_establishments && merchant.total_establishments > 0,
     },
   });
 
@@ -82,7 +82,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
           ? new Date(merchant.registration_date).toISOString().substring(0, 10)
           : '',
         status: merchant.status,
-        has_establishments: false,
+        has_establishments: !!merchant.total_establishments && merchant.total_establishments > 0,
       });
       setTotalIncome(merchant.total_income);
       setTotalEmployees(merchant.total_employees);
@@ -124,15 +124,13 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
   };
 
   return (
-    <div className=" bg-white shadow-md rounded-lg max-w-5xl mx-auto ">
+    <div className="bg-white shadow-md rounded-lg max-w-5xl mx-auto mb-24"> 
       <h3 className="border-b border-gray-200 text-blue-700 font-semibold p-5">
-            Datos Generales
-          </h3>
+        Datos Generales
+      </h3>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className=" rounded-lg p-5">
-          
-
+        <div className="rounded-lg p-5">
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div className="space-y-4 p-6">
               <div>
@@ -145,6 +143,8 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                 <input
                   {...register('business_name', {
                     required: 'Este campo es obligatorio',
+                    minLength: { value: 3, message: 'Debe tener al menos 3 caracteres' },
+                    maxLength: { value: 100, message: 'No puede exceder los 100 caracteres' },
                   })}
                   id="business_name"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
@@ -197,11 +197,19 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                   Teléfono (opcional)
                 </label>
                 <input
-                  {...register('phone')}
+                  {...register('phone', {
+                     maxLength: { value: 20, message: 'No puede exceder los 20 caracteres' }
+                  })}
                   id="phone"
+                  type="tel"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
                              focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
+                 {errors.phone && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.phone.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -220,8 +228,10 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                         /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                       message: 'Formato de correo inválido',
                     },
+                     maxLength: { value: 100, message: 'No puede exceder los 100 caracteres' }
                   })}
                   id="optional_email"
+                  type="email"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
                             focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
@@ -305,76 +315,64 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
           </div>
         </div>
 
+
+        
+
         {formError && (
-          <p className="text-red-500 text-sm mt-4 text-center">{formError}</p>
+          <p className="text-red-500 text-sm mt-4 text-center px-6 pb-4">{formError}</p>
         )}
 
-
-      </form>
-
-      {merchant && id && (
         <div className="fixed inset-x-4 md:inset-x-8 bottom-4 z-50">
           <div className="bg-[#103A8C] rounded-2xl shadow-xl">
             <div
               className="rounded-2xl border border-[#1A3E9A] px-6 py-4
-                         flex flex-col md:flex-row items-center md:justify-between gap-6"
+                flex flex-col md:flex-row items-center md:justify-between gap-y-4 md:gap-x-6"
             >
-              <div className="text-center md:text-left md:min-w-[260px]">
-                <p className="text-sm text-gray-200">
-                  Total Ingresos Formulario:
-                </p>
-                <p className="text-2xl font-extrabold text-cyan-300 leading-tight">
-                  ${totalIncome?.toLocaleString('es-CO') ?? '0'}
-                </p>
-              </div>
+              {merchant && id && (
+                <>
+                  <div className="text-center md:text-left md:min-w-[260px]">
+                    <p className="text-sm text-gray-200">
+                      Total Ingresos Formulario:
+                    </p>
+                    <p className="text-2xl font-extrabold text-cyan-300 leading-tight">
+                      ${totalIncome?.toLocaleString('es-CO') ?? '0'}
+                    </p>
+                  </div>
+                  <div className="hidden md:block h-12 border-l border-[#1A3E9A]" />
+                  <div className="text-center md:text-left md:min-w-[220px]">
+                    <p className="text-sm text-gray-200">Cantidad de empleados:</p>
+                    <p className="text-2xl font-extrabold text-cyan-300 leading-tight">
+                      {totalEmployees?.toLocaleString('es-CO') ?? '0'}
+                    </p>
+                  </div>
+                  <div className="hidden md:block h-12 border-l border-[#1A3E9A]" />
+                </>
+              )}
 
-              <div className="hidden md:block h-12 border-l border-[#1A3E9A]" />
-
-              {/* Bloque 2 */}
-              <div className="text-center md:text-left md:min-w-[220px]">
-                <p className="text-sm text-gray-200">Cantidad de empleados:</p>
-                <p className="text-2xl font-extrabold text-cyan-300 leading-tight">
-                  {totalEmployees?.toLocaleString('es-CO') ?? '0'}
-                </p>
-              </div>
-
-              <div className="hidden md:block h-12 border-l border-[#1A3E9A]" />
-
-              <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 w-full md:w-auto">
+              <div className={`flex flex-col md:flex-row items-center gap-3 md:gap-4 w-full ${!(merchant && id) ? 'md:justify-end' : ''}`}> 
                 <p className="text-sm text-gray-200 text-center md:text-left">
-                  Si ya ingresaste todos los datos, crea tu formulario aquí
+                  {merchant && id
+                    ? 'Si ya actualizaste los datos, envía tu formulario aquí'
+                    : 'Si ya ingresaste todos los datos, crea tu formulario aquí'}
                 </p>
-
-
-                <div className="mt-6">
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full flex justify-center py-2 px-4 rounded-md shadow-sm
-                       text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700
-                       focus:outline-none focus:ring-2 focus:ring-indigo-500
-                       disabled:bg-gray-400"
-                  >
-                    {isLoading
-                      ? 'Guardando...'
-                      : merchant
-                        ? 'Actualizar Comerciante'
-                        : 'Crear Comerciante'}
-                  </button>
-                </div>
                 <button
-                  type="button"
-                  onClick={handleSubmit(onSubmit)}
+                  type="submit" 
+                  disabled={isLoading}
                   className="bg-fuchsia-600 hover:bg-fuchsia-700 active:bg-fuchsia-800
-                             text-white font-semibold text-sm px-5 py-2 rounded-md transition-colors"
+                             text-white font-semibold text-sm px-5 py-2.5 rounded-md transition-colors
+                             disabled:bg-gray-500 disabled:cursor-not-allowed w-full md:w-auto"
                 >
-                  Enviar Formulario
+                  {isLoading
+                    ? 'Procesando...'
+                    : merchant && id
+                      ? 'Actualizar Formulario'
+                      : 'Crear Formulario'}
                 </button>
               </div>
             </div>
           </div>
         </div>
-      )}
+      </form>
     </div>
   );
 };

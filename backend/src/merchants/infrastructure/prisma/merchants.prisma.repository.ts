@@ -5,10 +5,24 @@ import {
   MerchantWithRelations,
   Pagination,
 } from '../../application/interfaces/merchants.repository';
-import { merchant } from '@prisma/client';
+import { merchant, Prisma } from '@prisma/client';
 import { CreateMerchantDto } from '../../application/dto/create-merchant.dto';
 import { UpdateMerchantDto } from '../../application/dto/update-merchant.dto';
 import { FiltersMerchantDto } from '../../application/dto/filters-merchant.dto';
+
+
+export interface Merchants extends merchant {
+  municipality: {
+    id_municipio: number;
+    nombre: string;
+  };
+  establishment: {
+    id_establishment: number;     
+    name: string;
+    income: Prisma.Decimal;       
+    employee_count: number;
+  }[];
+}
 
 @Injectable()
 export class MerchantsPrismaRepository implements IMerchantsRepository {
@@ -26,43 +40,71 @@ export class MerchantsPrismaRepository implements IMerchantsRepository {
     });
   }
 
-  async list(filters: FiltersMerchantDto): Promise<Pagination<merchant>> {
-    const {
-      page = 1,
-      limit = 5,
-      business_name,
-      status,
-      registration_date,
-    } = filters;
-    const skip = (page - 1) * limit;
+ async list(filters: FiltersMerchantDto): Promise<Pagination<any>> {
+  const {
+    page = 1,
+    limit = 5,
+    business_name,
+    status,
+    registration_date,
+  } = filters;
 
-    const where: any = {};
-    if (business_name)
-      where.business_name = { contains: business_name, mode: 'insensitive' };
-    if (status) where.status = status;
-    if (registration_date)
-      where.registration_date = new Date(registration_date);
+  const skip = (page - 1) * limit;
 
-    const [items, totalItems] = await Promise.all([
-      this.prisma.merchant.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { business_name: 'asc' },
-      }),
-      this.prisma.merchant.count({ where }),
-    ]);
-    return {
-      items,
-      totalItems,
-      totalPages: Math.ceil(totalItems / limit),
-      currentPage: page,
-    };
-  }
+  const where: any = {};
+  if (business_name)
+    where.business_name = { contains: business_name, mode: 'insensitive' };
+  if (status) where.status = status;
+  if (registration_date)
+    where.registration_date = new Date(registration_date);
 
-  async findById(id: number): Promise<merchant | null> {
-    return this.prisma.merchant.findUnique({ where: { id_merchant: id } });
-  }
+  const [items, totalItems] = await Promise.all([
+    this.prisma.merchant.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: { business_name: 'asc' },
+      include: {
+        _count: {
+          select: {
+            establishment: true,
+          },
+        },
+      },
+    }),
+    this.prisma.merchant.count({ where }),
+  ]);
+
+  const mappedItems = items.map((merchant) => ({
+    ...merchant,
+    total_establishments: merchant._count.establishment,
+  }));
+
+  return {
+    items: mappedItems,
+    totalItems,
+    totalPages: Math.ceil(totalItems / limit),
+    currentPage: page,
+  };
+}
+
+
+  async findById(id: number): Promise<Merchants | null> {
+  return this.prisma.merchant.findUnique({
+    where: { id_merchant: id },
+    include: {
+      municipality: true,
+      establishment: {
+  select: {
+    id_establishment: true,
+    name: true,
+    income: true,
+    employee_count: true,
+  },
+},
+    },
+  });
+}
 
   async update(
     id: number,
@@ -99,14 +141,14 @@ export class MerchantsPrismaRepository implements IMerchantsRepository {
     return this.prisma.merchant.findMany({
       where: { status: 'ACTIVE' },
       include: {
-        municipality: true,
-        establishment: {
-          select: {
-            income: true,
-            employee_count: true,
-          },
-        },
-      },
+  municipality: true,
+  establishment: {
+    select: {
+      income: true,
+      employee_count: true,
+    },
+  },
+},
       orderBy: { business_name: 'asc' },
     }) as unknown as Promise<MerchantWithRelations[]>;
   }
