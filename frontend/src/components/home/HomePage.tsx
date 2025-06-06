@@ -93,7 +93,7 @@ const HomePage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6" data-testid="homePage">
         <h1 className="text-2xl font-semibold">Lista Formularios Creados (Comerciantes)</h1>
         <div>
 

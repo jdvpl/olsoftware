@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React, { useState } from 'react';
@@ -27,7 +28,7 @@ const LoginForm = () => {
       } else {
         setError(response.data.message || 'Error en el inicio de sesión.');
       }
-    } catch (err) {
+    } catch (err:any) {
       setError(err.response?.data?.message || 'Error de conexión o credenciales inválidas.');
       console.error(err);
     }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -114,7 +115,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
       } else {
         setFormError(res.message || 'Ocurrió un error.');
       }
-    } catch (err) {
+    } catch (err: any) {
       setFormError(
         err?.response?.data?.message || 'Ocurrió un error en el servidor.',
       );
