@@ -33,6 +33,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
+
   const [totalIncome, setTotalIncome] = useState<number | undefined>(
     merchant?.total_income,
   );
@@ -73,22 +74,35 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
   }, []);
 
   useEffect(() => {
-    if (merchant) {
-      reset({
-        business_name: merchant.business_name,
-        id_municipio: merchant.id_municipio || '',
-        phone: merchant.phone || '',
-        optional_email: merchant.optional_email || '',
-        registration_date: merchant.registration_date
-          ? new Date(merchant.registration_date).toISOString().substring(0, 10)
-          : '',
-        status: merchant.status,
-        has_establishments: !!merchant.total_establishments && merchant.total_establishments > 0,
-      });
-      setTotalIncome(merchant.total_income);
-      setTotalEmployees(merchant.total_employees);
-    }
-  }, [merchant, reset]);
+  if (merchant) {
+    reset({
+      business_name: merchant.business_name,
+      id_municipio: merchant.id_municipio || '',
+      phone: merchant.phone || '',
+      optional_email: merchant.optional_email || '',
+      registration_date: merchant.registration_date
+        ? new Date(merchant.registration_date).toISOString().substring(0, 10)
+        : '',
+      status: merchant.status,
+      has_establishments:
+        !!merchant.total_establishments &&
+        merchant.total_establishments > 0,
+    });
+
+    const totalIncomeSum = merchant.establishment?.reduce(
+      (acc, est) => acc + Number(est.income || 0),
+      0,
+    );
+
+    
+    const totalEmployeesSum = merchant.establishment?.reduce(
+      (acc, est) => acc + Number(est.employee_count || 0),
+      0,
+    );
+    setTotalIncome(totalIncomeSum);
+    setTotalEmployees(totalEmployeesSum);
+  }
+}, [merchant, reset]);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     setIsLoading(true);
@@ -130,6 +144,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
         Datos Generales
       </h3>
 
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="rounded-lg p-5">
           <div className="grid grid-cols-1 md:grid-cols-2">
@@ -148,7 +163,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                     maxLength: { value: 100, message: 'No puede exceder los 100 caracteres' },
                   })}
                   id="business_name"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                  className="mt-1 block h-8 w-full rounded-md border-gray-300 shadow-sm
                       focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
                 {errors.business_name && (
@@ -170,7 +185,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                     required: 'Debe seleccionar un municipio',
                   })}
                   id="id_municipio"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                  className="mt-1 block h-8 w-full rounded-md border-gray-300 shadow-sm
                              focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   defaultValue=""
                 >
@@ -203,7 +218,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                   })}
                   id="phone"
                   type="tel"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                  className="mt-1 h-8 block w-full rounded-md border-gray-300 shadow-sm
                              focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
                  {errors.phone && (
@@ -233,7 +248,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                   })}
                   id="optional_email"
                   type="email"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                  className="mt-1 h-8 block w-full rounded-md border-gray-300 shadow-sm
                             focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
                 {errors.optional_email && (
@@ -256,7 +271,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                   })}
                   type="date"
                   id="registration_date"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                  className="mt-1 h-8 block w-full rounded-md border-gray-300 shadow-sm
                         focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
                 {errors.registration_date && (
@@ -278,7 +293,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                     required: 'Debe seleccionar un estado',
                   })}
                   id="status"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                  className="mt-1 h-8 block w-full rounded-md border-gray-300 shadow-sm
                              focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 >
                   <option value="ACTIVE">Activo</option>
@@ -350,7 +365,7 @@ const MerchantForm: React.FC<MerchantFormProps> = ({ merchant, id }) => {
                 </>
               )}
 
-              <div className={`flex flex-col md:flex-row items-center gap-3 md:gap-4 w-full ${!(merchant && id) ? 'md:justify-end' : ''}`}> 
+              <div className={`flex flex-col justify-between md:flex-row items-center gap-3 md:gap-4 w-full ${!(merchant && id) ? 'md:justify-end' : ''}`}> 
                 <p className="text-sm text-gray-200 text-center md:text-left">
                   {merchant && id
                     ? 'Si ya actualizaste los datos, envía tu formulario aquí'

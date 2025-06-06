@@ -50,15 +50,15 @@ const MerchantTable: React.FC<MerchantTableProps> = ({ merchants, onRefresh, cur
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white shadow-md rounded-lg">
-        <thead className="bg-gray-200">
+        <thead className="bg-blue-500 text-white">
           <tr>
-            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nombre o Razón Social</th>
-            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Teléfono</th>
-            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Correo Electrónico</th>
-            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Fecha Registro</th>
-            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">No. Estab.</th>
-            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Estado</th>
-            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Acciones</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold ">Nombre o Razón Social</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold ">Teléfono</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold ">Correo Electrónico</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold ">Fecha Registro</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold ">No. Estab.</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold ">Estado</th>
+            <th className="px-4 py-2 text-left text-sm font-semibold ">Acciones</th>
           </tr>
         </thead>
         <tbody>

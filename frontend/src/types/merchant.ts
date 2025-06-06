@@ -1,3 +1,10 @@
+export interface Establishment {
+  id_establishment: number;
+  income: number;
+  employee_count: number;
+  name:string
+}
+
 export interface Merchant {
   id_merchant: number;
   business_name: string;
@@ -16,6 +23,7 @@ export interface Merchant {
   total_income?: number;
   total_employees?: number;
   establishment_count?: number; 
+  establishment?: Establishment[];
 }
 
 export interface Municipality {
